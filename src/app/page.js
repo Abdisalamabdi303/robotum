@@ -6,30 +6,31 @@ import { supabase } from '@/lib/supabase'
 export default function Home() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+  const [connected, setConnected] = useState(false)
 
   useEffect(() => {
     async function testConnection() {
       try {
-        const { data, error } = await supabase.from('your_table').select('*').limit(1)
+        const { data, error } = await supabase.from('Users').select('User_ID').limit(1)
         if (error) throw error
-        console.log('Supabase connection successful:', data)
+        setConnected(true)
       } catch (error) {
-        console.error('Error connecting to Supabase:', error.message)
         setError(error.message)
       } finally {
         setLoading(false)
       }
     }
-
     testConnection()
   }, [])
 
   return (
-    <main className="min-h-screen p-8">
-      <h1 className="text-2xl font-bold mb-4">Supabase Connection Test</h1>
+    <main className="min-h-screen flex flex-col items-center justify-center p-8">
+      <h1 className="text-4xl font-bold mb-4">Supabase DB Connection Test</h1>
       {loading && <p>Testing connection...</p>}
       {error && <p className="text-red-500">Error: {error}</p>}
-      {!loading && !error && <p className="text-green-500">Connected to Supabase successfully!</p>}
+      {!loading && !error && connected && (
+        <p className="text-green-600">Connected to Supabase database successfully!</p>
+      )}
     </main>
   )
 }
