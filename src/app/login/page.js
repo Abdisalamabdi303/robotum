@@ -18,7 +18,7 @@ export default function LoginPage() {
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password })
       if (error) throw error
-      router.push('/admin-dashboard')
+      router.push('/admin/dashboard')
     } catch (error) {
       setError('Incorrect email or password. Please try again.')
     } finally {
@@ -29,7 +29,7 @@ export default function LoginPage() {
   // Check if already authenticated
   useState(() => {
     supabase.auth.getUser().then(({ data }) => {
-      if (data.user) router.push('/admin-dashboard')
+      if (data.user) router.push('/admin/dashboard')
     })
   }, [])
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
             value={email}
             onChange={e => setEmail(e.target.value)}
             required
-            className="w-full px-4 py-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-lg transition mb-2 bg-white text-black"
+            className="w-full px-4 py-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-lg transition mb-2 bg-white"
           />
           <input
             type="password"
@@ -58,7 +58,7 @@ export default function LoginPage() {
             value={password}
             onChange={e => setPassword(e.target.value)}
             required
-            className="w-full px-4 py-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-lg transition mb-2 bg-rose-50"
+            className="w-full px-4 py-3 rounded-xl border-2 border-rose-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-200 outline-none text-lg transition mb-2 bg- white text-black"
           />
           <button
             type="submit"
