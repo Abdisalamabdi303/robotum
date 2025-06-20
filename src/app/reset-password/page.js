@@ -1,16 +1,30 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '@/lib/supabase'
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [message, setMessage] = useState(null)
+  const [session, setSession] = useState(null)
   const router = useRouter()
+
+  useEffect(() => {
+    // Wait for Supabase to pick up the session from the URL hash
+    const getSession = async () => {
+      const { data, error } = await supabase.auth.getSession()
+      if (error) {
+        setError('Could not get session. Please use the link from your email.')
+      }
+      setSession(data.session)
+      setLoading(false)
+    }
+    getSession()
+  }, [])
 
   const handleResetPassword = async (e) => {
     e.preventDefault()
@@ -34,6 +48,22 @@ export default function ResetPasswordPage() {
     } finally {
       setLoading(false)
     }
+  }
+
+  if (loading) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-white">
+        <p>Loading...</p>
+      </main>
+    )
+  }
+
+  if (!session) {
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-white">
+        <p className="text-red-600">Auth session missing. Please use the link from your email.</p>
+      </main>
+    )
   }
 
   return (
