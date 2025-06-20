@@ -15,10 +15,6 @@ export default function ResetPasswordPage() {
 
   useEffect(() => {
     let timeout
-    // Force Supabase to process the hash if present
-    if (typeof window !== 'undefined' && window.location.hash) {
-      supabase.auth._processUrlHash(window.location.hash)
-    }
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) {
         setSession(data.session)
